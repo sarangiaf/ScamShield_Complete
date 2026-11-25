@@ -1,0 +1,838 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScamTrace | Threat Intelligence Lab</title>
+
+<style>
+:root {
+  --bg:#070b16;
+  --panel:#10182a;
+  --line:#293a55;
+  --text:#f1f5ff;
+  --muted:#9aaac5;
+  --cyan:#50e6ff;
+  --purple:#a78bfa;
+  --green:#4ade80;
+  --yellow:#fbbf24;
+  --red:#fb7185;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;color:var(--text);
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+  line-height:1.6;min-height:100vh;
+  background:
+    radial-gradient(ellipse at 10% 0%,#172d50,transparent 38%),
+    radial-gradient(ellipse at 95% 5%,#291b4b,transparent 32%),
+    var(--bg);
+}
+.wrap{width:min(1180px,92%);margin:auto}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:15px;padding:22px 0;border-bottom:1px solid #ffffff15;
+}
+.brand{display:flex;align-items:center;gap:12px;font-weight:900}
+.logo{
+  display:grid;place-items:center;width:45px;height:45px;
+  border-radius:14px;color:#07111f;font-size:24px;
+  background:linear-gradient(135deg,var(--cyan),var(--purple));
+  box-shadow:0 0 28px #50e6ff35;
+}
+.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:1.5px}
+.online{
+  border:1px solid #4ade8040;color:var(--green);
+  border-radius:99px;padding:7px 12px;font-size:12px;
+  background:#4ade800c;
+}
+.hero{padding:58px 0 34px}
+.eyebrow{
+  display:inline-block;padding:7px 12px;border-radius:99px;
+  color:var(--cyan);background:#50e6ff0d;
+  border:1px solid #50e6ff40;font-size:12px;
+  font-weight:800;letter-spacing:1px;
+}
+h1{font-size:clamp(38px,6vw,72px);line-height:1.08;letter-spacing:-2px;margin:18px 0}
+.gradient{
+  background:linear-gradient(90deg,var(--cyan),#b6a3ff,#f0abfc);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.hero p{max-width:760px;color:var(--muted);font-size:17px}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.tag{
+  padding:7px 11px;border-radius:99px;border:1px solid var(--line);
+  color:#d4e0f3;background:#101a2b;font-size:12px;
+}
+.layout{
+  display:grid;grid-template-columns:minmax(0,1.15fr) minmax(290px,.85fr);
+  gap:20px;align-items:start;padding-bottom:32px;
+}
+.panel{
+  min-width:0;padding:clamp(18px,3vw,28px);margin-bottom:20px;
+  border:1px solid var(--line);border-radius:22px;
+  background:linear-gradient(145deg,#121d32f5,#0c1424fa);
+  box-shadow:0 18px 50px #0003;
+}
+.panel-head{display:flex;justify-content:space-between;gap:15px;margin-bottom:20px}
+h2{font-size:20px;margin:0 0 5px}
+h3{font-size:14px;margin:0 0 8px}
+.sub{font-size:13px;color:var(--muted);margin:0}
+.iconbox{
+  display:grid;place-items:center;flex-shrink:0;
+  width:42px;height:42px;border-radius:13px;
+  background:#50e6ff12;border:1px solid #50e6ff2b;font-size:22px;
+}
+label{display:block;margin:17px 0 8px;font-size:14px;font-weight:750}
+textarea,select{
+  width:100%;padding:14px;border-radius:13px;
+  background:#080f1d;color:var(--text);
+  border:1px solid #344662;font:inherit;outline:none;
+}
+textarea{min-height:180px;resize:vertical}
+textarea::placeholder{color:#71829f}
+textarea:focus,select:focus{
+  border-color:var(--cyan);box-shadow:0 0 0 3px #50e6ff18;
+}
+select option{background:#10182a;color:white}
+.hint{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px;margin-top:7px}
+.buttons{display:flex;gap:10px;margin-top:18px}
+button{
+  padding:12px 16px;border-radius:12px;border:0;
+  font:inherit;font-weight:800;cursor:pointer;transition:.2s;
+}
+button:hover{transform:translateY(-2px);filter:brightness(1.08)}
+.primary{
+  flex:1;color:#07111f;
+  background:linear-gradient(100deg,var(--cyan),#a5a5ff);
+  box-shadow:0 8px 24px #50e6ff20;
+}
+.secondary{background:#17233a;color:#dce8fb;border:1px solid #344662}
+.examples{border-top:1px solid #ffffff15;margin-top:22px;padding-top:16px}
+.examples-title{font-size:12px;color:var(--muted);margin-bottom:10px}
+.example-buttons{display:flex;flex-wrap:wrap;gap:8px}
+.example-buttons button{
+  font-size:12px;font-weight:650;padding:8px 10px;
+  color:#c9d7ed;background:#111d31;border:1px solid var(--line);
+}
+.status{font-size:13px;color:var(--muted)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:7px}
+.score-wrap{display:flex;align-items:center;gap:18px;margin:22px 0}
+.gauge{
+  width:108px;height:108px;flex-shrink:0;border-radius:50%;
+  display:grid;place-items:center;position:relative;
+  background:conic-gradient(var(--cyan) 0deg,#27364e 0deg);
+}
+.gauge:before{content:"";position:absolute;inset:8px;border-radius:50%;background:#10182a}
+.gauge-inner{position:relative;text-align:center}
+.score{font-size:30px;font-weight:900;line-height:1.2}
+.gauge-label{font-size:10px;color:var(--muted)}
+.risk-title{font-size:18px;font-weight:850}
+.risk-desc{font-size:12px;color:var(--muted)}
+.badge{
+  display:inline-block;margin-top:7px;padding:5px 9px;border-radius:8px;
+  font-size:11px;font-weight:850;background:#50e6ff12;color:var(--cyan);
+}
+.metrics{display:grid;gap:13px;margin-top:20px}
+.metric{display:grid;grid-template-columns:1fr auto;gap:7px;font-size:12px;color:#c5d2e8}
+.track{grid-column:1/-1;height:6px;border-radius:99px;background:#26344b;overflow:hidden}
+.fill{height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--purple));transition:width .3s}
+.result-box{
+  border:1px solid var(--line);background:#0a1221;
+  border-radius:14px;padding:15px;margin-top:16px;
+  overflow-wrap:anywhere;
+}
+.result-box p{color:var(--muted);font-size:13px;margin:0}
+.pills{display:flex;flex-wrap:wrap;gap:7px}
+.pill{
+  font-size:12px;padding:5px 8px;border-radius:8px;
+  color:#ffb2c0;background:#fb718510;border:1px solid #fb71852b;
+}
+.muted{color:var(--muted);font-size:13px}
+.section{padding:10px 0 32px}
+.section-title{margin-bottom:18px}
+.section-title p{margin:5px 0;color:var(--muted);font-size:13px}
+.coverage-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.lang-card,.feature{
+  padding:14px;border:1px solid var(--line);
+  border-radius:15px;background:#10182acc;min-width:0;
+}
+.lang-name{font-weight:800;font-size:14px}
+.lang-native{color:var(--muted);font-size:12px;min-height:22px}
+.coverage-status{display:inline-block;margin-top:9px;padding:4px 7px;border-radius:7px;font-size:10px;font-weight:800}
+.implemented{color:var(--green);background:#4ade8010;border:1px solid #4ade802b}
+.listed{color:var(--yellow);background:#fbbf2410;border:1px solid #fbbf242b}
+.note{
+  border:1px solid #fbbf2430;background:#fbbf2408;border-radius:14px;
+  padding:15px;color:#e7d8ac;font-size:13px;margin-top:17px;
+}
+.feature-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.feature{padding:20px}
+.feature-icon{font-size:24px}
+.feature h3{margin-top:10px}
+.feature p{font-size:13px;color:var(--muted);margin-bottom:0}
+.steps{display:grid;gap:13px}
+.step{display:flex;gap:12px;align-items:flex-start}
+.step-num{
+  width:30px;height:30px;flex-shrink:0;display:grid;place-items:center;
+  border-radius:9px;color:var(--cyan);background:#50e6ff13;
+  border:1px solid #50e6ff35;font-size:12px;font-weight:900;
+}
+.step p{font-size:13px;color:var(--muted);margin:2px 0 0}
+footer{border-top:1px solid #ffffff15;padding:25px 0 35px;color:var(--muted);font-size:12px}
+.footer-inner{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .coverage-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:560px){
+  .hero{padding-top:38px}h1{letter-spacing:-1px}
+  .topbar{align-items:flex-start}.online{font-size:10px}
+  .coverage-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .feature-grid{grid-template-columns:1fr}
+  .buttons{flex-direction:column}
+  .buttons button{width:100%}
+  .gauge{width:90px;height:90px}
+  .score{font-size:25px}
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">🛡</div>
+      <div>SCAMTRACE<small>THREAT INTELLIGENCE LAB</small></div>
+    </div>
+    <div class="online">● OFFLINE ANALYSIS MODE</div>
+  </div>
+
+  <header class="hero">
+    <div class="eyebrow">● PRIVACY-FIRST · BROWSER-BASED</div>
+    <h1>Spot the scam.<br><span class="gradient">Before it spots you.</span></h1>
+    <p>
+      Inspect suspicious SMS messages using local phrase patterns,
+      urgency signals and credential/payment requests. Designed for
+      Indian-language and mixed-script messages, with clear coverage limits.
+    </p>
+    <div class="tags">
+      <span class="tag">🔒 No API calls</span>
+      <span class="tag">🇮🇳 Indian language clues</span>
+      <span class="tag">⚡ Instant local scan</span>
+      <span class="tag">🧠 Explainable signals</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="layout">
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>SMS Threat Analyzer</h2>
+            <p class="sub">Paste a message to inspect suspicious indicators.</p>
+          </div>
+          <div class="iconbox">⌁</div>
+        </div>
+
+        <label for="smsInput">Message content</label>
+        <textarea id="smsInput" maxlength="5000"
+          placeholder="Example: Your bank account will be blocked today. Verify KYC now and share OTP..."></textarea>
+
+        <div class="hint">
+          <span>Text stays in this browser tab.</span>
+          <span id="charCount">0 / 5000</span>
+        </div>
+
+        <label for="languageSelect">Message language (optional hint)</label>
+        <select id="languageSelect">
+          <option value="auto">Auto / mixed-language scan</option>
+          <option>Hindi</option>
+          <option>Hinglish</option>
+          <option>English</option>
+          <option>Bengali</option>
+          <option>Gujarati</option>
+          <option>Marathi</option>
+          <option>Punjabi</option>
+          <option>Tamil</option>
+          <option>Telugu</option>
+          <option>Kannada</option>
+          <option>Malayalam</option>
+          <option>Odia</option>
+          <option>Assamese</option>
+          <option>Urdu</option>
+          <option>Kashmiri</option>
+          <option>Konkani</option>
+          <option>Maithili</option>
+          <option>Manipuri</option>
+          <option>Nepali</option>
+          <option>Bodo</option>
+          <option>Dogri</option>
+          <option>Santali</option>
+          <option>Sanskrit</option>
+          <option>Sindhi</option>
+        </select>
+
+        <div class="buttons">
+          <button class="primary" id="analyzeBtn">✦ Analyze message</button>
+          <button class="secondary" id="clearBtn">Clear</button>
+        </div>
+
+        <div class="examples">
+          <div class="examples-title">TRY A SAMPLE MESSAGE</div>
+          <div class="example-buttons">
+            <button type="button" data-example="Your bank account will be blocked today. Complete KYC now and share OTP to avoid suspension.">Bank / OTP</button>
+            <button type="button" data-example="Congratulations! You won a prize. Pay processing fee now to claim your reward.">Prize fee</button>
+            <button type="button" data-example="Hi, kal milte hain? Please call me when you reach home.">Normal message</button>
+            <button type="button" data-example="Aapka KYC expire ho gaya hai. Account band hone se bachane ke liye abhi OTP share karo.">Hinglish</button>
+          </div>
+        </div>
+      </section>
+
+      <aside>
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Threat assessment</h2>
+              <p class="sub">Heuristic score, not a definitive verdict.</p>
+            </div>
+            <div class="iconbox">◈</div>
+          </div>
+
+          <div class="status"><span class="dot"></span><span id="scanState">Waiting for message analysis</span></div>
+
+          <div class="score-wrap">
+            <div class="gauge" id="gauge">
+              <div class="gauge-inner">
+                <div class="score" id="score">—</div>
+                <div class="gauge-label">RISK SCORE</div>
+              </div>
+            </div>
+            <div>
+              <div class="risk-title" id="riskTitle">No scan yet</div>
+              <div class="risk-desc" id="riskDesc">Analyze a message to see detected signals.</div>
+              <span class="badge" id="riskBadge">AWAITING INPUT</span>
+            </div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <span>Urgency / pressure</span><strong id="urgencyValue">0%</strong>
+              <div class="track"><div class="fill" id="urgencyBar"></div></div>
+            </div>
+            <div class="metric">
+              <span>Credential / payment requests</span><strong id="requestValue">0%</strong>
+              <div class="track"><div class="fill" id="requestBar"></div></div>
+            </div>
+            <div class="metric">
+              <span>Prize / reward clues</span><strong id="baitValue">0%</strong>
+              <div class="track"><div class="fill" id="baitBar"></div></div>
+            </div>
+          </div>
+
+          <div class="result-box">
+            <h3>Detected indicators</h3>
+            <div id="indicatorList" class="muted">Nothing analyzed yet.</div>
+          </div>
+
+          <div class="result-box">
+            <h3>Suggested next step</h3>
+            <p id="advice">Never share OTPs, PINs or passwords with unverified contacts.</p>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <h2>Analysis details</h2>
+              <p class="sub">What this local analyzer can and cannot infer.</p>
+            </div>
+            <div class="iconbox">⌘</div>
+          </div>
+          <div class="result-box">
+            <h3>Language clues</h3>
+            <p id="languageResult">Not analyzed yet.</p>
+          </div>
+          <div class="result-box">
+            <h3>URL clues</h3>
+            <p id="urlResult">No URL inspected yet.</p>
+          </div>
+          <div class="result-box">
+            <h3>Privacy notice</h3>
+            <p>Analysis runs locally in your browser. This page does not perform live phone-owner lookup, location lookup, or website reputation checks.</p>
+          </div>
+        </section>
+      </aside>
+    </div>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>Indian language coverage</h2>
+        <p>Listing a language does not mean full scam detection support.</p>
+      </div>
+      <div class="coverage-grid" id="coverageGrid"></div>
+      <div class="note">
+        <strong>Coverage limitation:</strong>
+        Starter phrase rules are included for English, Hindi, Hinglish,
+        Bengali, Gujarati, Marathi, Punjabi, Tamil, Telugu, Kannada,
+        Malayalam, Odia, Assamese and Urdu. Other languages are listed but
+        do not have dedicated phrase dictionaries in this version. This is
+        a rule-based prototype, not a trained AI model. It can miss scams
+        phrased differently.
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-title">
+        <h2>How ScamTrace works</h2>
+        <p>Simple, explainable local analysis.</p>
+      </div>
+      <div class="feature-grid">
+        <div class="feature">
+          <div class="feature-icon">🔎</div>
+          <h3>Phrase matching</h3>
+          <p>Looks for configured words linked to OTPs, account blocking, payments, prizes and urgency.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🧮</div>
+          <h3>Risk scoring</h3>
+          <p>Combines matching signals into a heuristic score. It is not a probability that a scam is real.</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔐</div>
+          <h3>Local by design</h3>
+          <p>Message analysis happens in the browser without an external analysis API.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Safety checklist</h2>
+          <p class="sub">Steps to take when a message seems suspicious.</p>
+        </div>
+        <div class="iconbox">✓</div>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="step-num">01</div><p>Never share an OTP, UPI PIN, password or full card details in response to an unsolicited message.</p></div>
+        <div class="step"><div class="step-num">02</div><p>Do not open unexpected links or install apps/APK files sent by unknown contacts.</p></div>
+        <div class="step"><div class="step-num">03</div><p>Verify claims using an official app or website that you open yourself.</p></div>
+        <div class="step"><div class="step-num">04</div><p>If money has been lost to cyber fraud in India, contact your bank immediately and call the cyber-fraud helpline 1930.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>🛡 ScamTrace · Offline prototype</span>
+      <span>Educational tool only · False positives and missed scams are possible</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+const dictionaries = {
+  English: [
+    "otp","share your otp","verify kyc","account will be blocked",
+    "account blocked","suspended account","click here","claim your prize",
+    "processing fee","urgent action","verify your account","password",
+    "upi pin","bank details","send money","payment required","won a prize",
+    "limited time","kyc expired","update kyc","account suspended"
+  ],
+  Hindi: [
+    "ओटीपी","ओटीपी बताएं","खाता बंद","खाता बंद हो जाएगा",
+    "केवाईसी अपडेट","अभी क्लिक करें","इनाम जीतें","पैसे भेजें",
+    "तुरंत भुगतान","बैंक खाता","पासवर्ड बताएं","पिन बताएं",
+    "लिंक खोलें","तुरंत करें","खाता ब्लॉक","शुल्क जमा करें"
+  ],
+  Hinglish: [
+    "otp batao","otp share karo","kyc update karo","account band",
+    "account band ho jayega","abhi click karo","inaam jeeto",
+    "paise bhejo","turant payment","bank account block",
+    "password batao","upi pin batao","link kholo","abhi karo",
+    "prize claim karo","fee pay karo","account verify karo"
+  ],
+  Bengali: [
+    "ওটিপি","অ্যাকাউন্ট বন্ধ","কেওয়াইসি আপডেট",
+    "এখনই ক্লিক করুন","পুরস্কার জিতেছেন","টাকা পাঠান",
+    "পাসওয়ার্ড","পিন শেয়ার","জরুরি পেমেন্ট"
+  ],
+  Gujarati: [
+    "ઓટીપી","ખાતું બંધ","કેવાયસી અપડેટ","અહીં ક્લિક કરો",
+    "ઇનામ જીત્યું","પૈસા મોકલો","પાસવર્ડ","પિન શેર"
+  ],
+  Marathi: [
+    "ओटीपी सांगा","खाते बंद","केवायसी अपडेट","येथे क्लिक करा",
+    "बक्षीस जिंकले","पैसे पाठवा","पासवर्ड","पिन सांगा"
+  ],
+  Punjabi: [
+    "ਓਟੀਪੀ ਦੱਸੋ","ਖਾਤਾ ਬੰਦ","ਕੇਵਾਈਸੀ ਅਪਡੇਟ",
+    "ਇੱਥੇ ਕਲਿੱਕ ਕਰੋ","ਇਨਾਮ ਜਿੱਤਿਆ","ਪੈਸੇ ਭੇਜੋ",
+    "ਪਾਸਵਰਡ","ਪਿੰਨ ਦੱਸੋ"
+  ],
+  Tamil: [
+    "ஓடிபி","கணக்கு முடக்கப்படும்","கேஒய்சி புதுப்பிக்க",
+    "இங்கே கிளிக்","பரிசு வென்றீர்கள்","பணம் அனுப்புங்கள்",
+    "கடவுச்சொல்","பின் எண்ணை"
+  ],
+  Telugu: [
+    "ఓటీపీ","ఖాతా బ్లాక్","కేవైసీ అప్డేట్",
+    "ఇక్కడ క్లిక్","బహుమతి గెలుచుకున్నారు","డబ్బు పంపండి",
+    "పాస్‌వర్డ్","పిన్ చెప్పండి"
+  ],
+  Kannada: [
+    "ಒಟಿಪಿ","ಖಾತೆ ನಿರ್ಬಂಧ","ಕೆವೈಸಿ ಅಪ್‌ಡೇಟ್",
+    "ಇಲ್ಲಿ ಕ್ಲಿಕ್","ಬಹುಮಾನ ಗೆದ್ದಿದ್ದೀರಿ","ಹಣ ಕಳುಹಿಸಿ",
+    "ಪಾಸ್‌ವರ್ಡ್","ಪಿನ್ ಹೇಳಿ"
+  ],
+  Malayalam: [
+    "ഒടിപി","അക്കൗണ്ട് ബ്ലോക്ക്","കെവൈസി അപ്ഡേറ്റ്",
+    "ഇവിടെ ക്ലിക്ക്","സമ്മാനം നേടി","പണം അയയ്ക്കുക",
+    "പാസ്‌വേഡ്","പിൻ നമ്പർ"
+  ],
+  Odia: [
+    "ଓଟିପି","ଖାତା ବନ୍ଦ","କେୱାଇସି ଅପଡେଟ",
+    "ଏଠାରେ କ୍ଲିକ","ପୁରସ୍କାର ଜିତିଛନ୍ତି",
+    "ଟଙ୍କା ପଠାନ୍ତୁ","ପାସୱାର୍ଡ"
+  ],
+  Assamese: [
+    "অ’টিপি","একাউণ্ট বন্ধ","কেৱাইচি আপডেট",
+    "ইয়াত ক্লিক","পুৰস্কাৰ জিকিছে","টকা পঠিয়াওক","পাছৱৰ্ড"
+  ],
+  Urdu: [
+    "او ٹی پی","اکاؤنٹ بند","کے وائی سی اپ ڈیٹ",
+    "یہاں کلک کریں","انعام جیتا","پیسے بھیجیں",
+    "پاس ورڈ","پن بتائیں"
+  ]
+};
+
+const languageNames = [
+  ["Assamese","অসমীয়া"],["Bengali","বাংলা"],
+  ["Bodo","बड़ो"],["Dogri","डोगरी"],["Gujarati","ગુજરાતી"],
+  ["Hindi","हिन्दी"],["Kannada","ಕನ್ನಡ"],["Kashmiri","कॉशुर"],
+  ["Konkani","कोंकणी"],["Maithili","मैथिली"],
+  ["Malayalam","മലയാളം"],["Manipuri","মৈতৈलोन्"],
+  ["Marathi","मराठी"],["Nepali","नेपाली"],["Odia","ଓଡ଼ିଆ"],
+  ["Punjabi","ਪੰਜਾਬੀ"],["Sanskrit","संस्कृतम्"],
+  ["Santali","ᱥᱟᱱᱛᱟᱲᱤ"],["Sindhi","سنڌي"],
+  ["Tamil","தமிழ்"],["Telugu","తెలుగు"],["Urdu","اردو"],
+  ["Hinglish","Roman Hindi + English"],["English","English"]
+];
+
+const riskPatterns = {
+  urgency: [
+    "urgent","immediately","today","now","within 24 hours",
+    "last chance","act now","expire","expired","blocked",
+    "suspended","तुरंत","अभी","आज","बंद हो जाएगा",
+    "abhi","turant","aaj","band ho jayega"
+  ],
+  request: [
+    "otp","one time password","password","upi pin","pin number",
+    "share your otp","bank details","card details","send money",
+    "pay now","payment required","processing fee","verify kyc",
+    "kyc update","ओटीपी","पासवर्ड","पैसे भेजें","otp batao",
+    "otp share karo","upi pin batao","paise bhejo","પૈસા મોકલો",
+    "টাকা পাঠান","ஓடிபி","డబ్బు పంపండి","ಒಟಿಪಿ","പണം അയയ്ക്കുക",
+    "ଓଟିପି","پیسے بھیجیں"
+  ],
+  bait: [
+    "won a prize","claim your prize","lottery","winner","reward",
+    "free gift","cashback","congratulations","prize","इनाम",
+    "पुरस्कार","inaam jeeto","prize claim","gift","বিজয়ী",
+    "পুরস্কার","ઇનામ","बक्षीस","பரிசு","బహుమతి","ಬಹುಮಾನ",
+    "സമ്മാനം","ପୁରସ୍କାର"
+  ]
+};
+
+const generalFlags = [
+  ["Urgent or threatening language",riskPatterns.urgency,22],
+  ["Sensitive information / payment request",riskPatterns.request,35],
+  ["Prize or reward bait",riskPatterns.bait,22],
+  ["Suspicious link wording",[
+    "bit.ly","tinyurl.com","t.co/","cutt.ly","rb.gy",
+    "is.gd","click here","tap here","open this link","लिंक खोलें"
+  ],18],
+  ["Account verification / impersonation clues",[
+    "bank account","kyc","verify your account","account blocked",
+    "account suspended","customer care","bank support",
+    "account verify","खाता बंद","केवाईसी","kyc update"
+  ],18]
+];
+
+const $ = id => document.getElementById(id);
+
+function normalize(value) {
+  return value.normalize("NFKC")
+    .toLocaleLowerCase()
+    .replace(/[’‘`]/g,"'")
+    .replace(/[^\p{L}\p{N}\s.:/_-]/gu," ")
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+function findMatches(text, phrases) {
+  const normalized = normalize(text);
+
+  return phrases.filter(phrase => {
+    const q = normalize(phrase);
+    if (!q) return false;
+
+    // Use whole-word matching for English/Roman-script phrases.
+    if (/^[a-z0-9 .:/_-]+$/i.test(q)) {
+      const escaped = q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")
+        .replace(/\s+/g,"\\s+");
+      return new RegExp(
+        "(^|[^a-z0-9])" + escaped + "([^a-z0-9]|$)","i"
+      ).test(normalized);
+    }
+
+    return normalized.includes(q);
+  });
+}
+
+function buildCoverage() {
+  const grid = $("coverageGrid");
+
+  languageNames.forEach(([name,native]) => {
+    const active = Boolean(dictionaries[name]);
+    const card = document.createElement("div");
+    card.className = "lang-card";
+
+    const title = document.createElement("div");
+    title.className = "lang-name";
+    title.textContent = name;
+
+    const nativeName = document.createElement("div");
+    nativeName.className = "lang-native";
+    nativeName.textContent = native;
+
+    const status = document.createElement("span");
+    status.className = "coverage-status " +
+      (active ? "implemented" : "listed");
+    status.textContent = active
+      ? "Starter rules included"
+      : "Listed · no dedicated rules";
+
+    card.append(title,nativeName,status);
+    grid.appendChild(card);
+  });
+}
+
+function setMetric(name,value) {
+  $(name+"Value").textContent = value + "%";
+  $(name+"Bar").style.width = value + "%";
+}
+
+function setRisk(score,level,description,color,badge) {
+  $("score").textContent = score;
+  $("gauge").style.background =
+    `conic-gradient(${color} ${score*3.6}deg,#27364e 0deg)`;
+  $("riskTitle").textContent = level;
+  $("riskDesc").textContent = description;
+  $("riskBadge").textContent = badge;
+  $("riskBadge").style.color = color;
+  $("riskBadge").style.background = color + "16";
+}
+
+function analyze() {
+  const raw = $("smsInput").value.trim();
+
+  if (!raw) {
+    $("smsInput").focus();
+    $("scanState").textContent = "Enter a message to begin";
+    return;
+  }
+
+  let score = 0;
+  let urgency = 0;
+  let request = 0;
+  let bait = 0;
+  const allMatches = [];
+  const selected = $("languageSelect").value;
+
+  generalFlags.forEach(([label,phrases,weight]) => {
+    const matches = findMatches(raw,phrases);
+
+    if (matches.length) {
+      allMatches.push({label,matches});
+      score += weight + Math.min(8,(matches.length-1)*3);
+
+      if (label.startsWith("Urgent")) {
+        urgency = Math.min(100,35+matches.length*22);
+      }
+      if (label.startsWith("Sensitive")) {
+        request = Math.min(100,45+matches.length*20);
+      }
+      if (label.startsWith("Prize")) {
+        bait = Math.min(100,40+matches.length*25);
+      }
+    }
+  });
+
+  const candidates = selected === "auto"
+    ? Object.keys(dictionaries)
+    : [...new Set([selected,"English","Hindi","Hinglish"])];
+
+  const languageMatches = [];
+
+  candidates.forEach(name => {
+    const phrases = dictionaries[name];
+    if (!phrases) return;
+
+    const matches = findMatches(raw,phrases);
+
+    if (matches.length) {
+      languageMatches.push({name,matches});
+      score += Math.min(18,matches.length*7);
+
+      let item = allMatches.find(
+        x => x.label === "Language-specific suspicious phrase"
+      );
+
+      if (!item) {
+        item = {
+          label:"Language-specific suspicious phrase",
+          matches:[]
+        };
+        allMatches.push(item);
+      }
+
+      item.matches.push(...matches);
+    }
+  });
+
+  score = Math.min(99,score);
+
+  const urls = raw.match(/(?:https?:\/\/|www\.)[^\s<>"']+/gi) || [];
+  const shorteners = urls.filter(url =>
+    /bit\.ly|tinyurl\.com|t\.co\/|cutt\.ly|rb\.gy|is\.gd/i.test(url)
+  );
+
+  $("urlResult").textContent = urls.length
+    ? `${urls.length} URL(s) found. ` +
+      (shorteners.length
+        ? `${shorteners.length} match common URL-shortener patterns. `
+        : "No common shortener pattern detected. ") +
+      "This page does not open links or check live reputation."
+    : "No obvious URL found. Some links without http or www may not be detected.";
+
+  let level,description,color,badge,advice;
+
+  if (score >= 65) {
+    level = "High warning";
+    description = "Several suspicious indicators matched.";
+    color = "#fb7185";
+    badge = "HIGH RISK SIGNALS";
+    advice = "Do not reply, click links, pay fees or share OTP/PIN/passwords. Verify using an official app or a contact channel you find independently.";
+  } else if (score >= 30) {
+    level = "Use caution";
+    description = "Some suspicious patterns were found.";
+    color = "#fbbf24";
+    badge = "CAUTION ADVISED";
+    advice = "Pause and verify the claim independently. Never share OTPs, UPI PINs or passwords, even if the message looks official.";
+  } else {
+    level = "Fewer signals found";
+    description = "Few configured scam patterns matched.";
+    color = "#4ade80";
+    badge = "LOW MATCH COUNT";
+    advice = "A low score does not mean the message is safe. Check sender context and links independently.";
+  }
+
+  setRisk(score,level,description,color,badge);
+  setMetric("urgency",urgency);
+  setMetric("request",request);
+  setMetric("bait",bait);
+
+  $("scanState").textContent = "Local scan complete";
+  $("advice").textContent = advice;
+
+  const list = $("indicatorList");
+  list.innerHTML = "";
+
+  if (!allMatches.length) {
+    list.className = "muted";
+    list.textContent =
+      "No configured suspicious phrase matched. This does not prove the message is safe.";
+  } else {
+    list.className = "pills";
+
+    const unique = [];
+    allMatches.forEach(item => {
+      item.matches.forEach(match => {
+        if (!unique.includes(match)) unique.push(match);
+      });
+    });
+
+    unique.slice(0,12).forEach(match => {
+      const pill = document.createElement("span");
+      pill.className = "pill";
+      pill.textContent = match;
+      list.appendChild(pill);
+    });
+
+    const labels = document.createElement("p");
+    labels.style.cssText =
+      "width:100%;color:#9aaac5;font-size:12px;margin:7px 0 0";
+    labels.textContent = allMatches.map(item => item.label).join(" · ");
+    list.appendChild(labels);
+  }
+
+  $("languageResult").textContent = languageMatches.length
+    ? languageMatches.map(item =>
+        `${item.name} (${item.matches.length} phrase matches)`
+      ).join(", ") +
+      (selected !== "auto" ? `. Selected hint: ${selected}.` : "")
+    : "No configured language phrase matched. Language selection is only a hint; automatic language identification is not guaranteed.";
+}
+
+$("smsInput").addEventListener("input",() => {
+  $("charCount").textContent =
+    $("smsInput").value.length + " / 5000";
+});
+
+$("analyzeBtn").addEventListener("click",analyze);
+
+$("clearBtn").addEventListener("click",() => {
+  $("smsInput").value = "";
+  $("charCount").textContent = "0 / 5000";
+  $("scanState").textContent = "Waiting for message analysis";
+  $("score").textContent = "—";
+  $("gauge").style.background =
+    "conic-gradient(var(--cyan) 0deg,#27364e 0deg)";
+  $("riskTitle").textContent = "No scan yet";
+  $("riskDesc").textContent = "Analyze a message to see detected signals.";
+  $("riskBadge").textContent = "AWAITING INPUT";
+  $("riskBadge").style.color = "var(--cyan)";
+  $("riskBadge").style.background = "#50e6ff12";
+
+  setMetric("urgency",0);
+  setMetric("request",0);
+  setMetric("bait",0);
+
+  $("indicatorList").textContent = "Nothing analyzed yet.";
+  $("indicatorList").className = "muted";
+  $("advice").textContent =
+    "Never share OTPs, PINs or passwords with unverified contacts.";
+  $("languageResult").textContent = "Not analyzed yet.";
+  $("urlResult").textContent = "No URL inspected yet.";
+});
+
+document.querySelectorAll("[data-example]").forEach(button => {
+  button.addEventListener("click",() => {
+    $("smsInput").value = button.dataset.example;
+    $("charCount").textContent =
+      $("smsInput").value.length + " / 5000";
+    $("languageSelect").value = "auto";
+    analyze();
+  });
+});
+
+buildCoverage();
+</script>
+</body>
+</html>

@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ScamShield | Phishing Link Detector</title>
+  <link rel="stylesheet" href="./phishing.css">
+  <script defer src="./phishing.js"></script>
+</head>
+<body>
+
+<header class="navbar">
+  <a class="brand" href="home.html">🛡️ SCAM<span>SHIELD</span></a>
+  <nav>
+    <a href="home.html">🏠 Home</a>
+    <a href="home.html#scanner">📩 SMS Scanner</a>
+    <a href="scan-history.html">📋 Spam History</a>
+    <a href="cyber-tips.html">💡 Cyber Tips</a>
+    <a href="face-lock.html">🔐 Face Access</a>
+    <a class="active" href="phishing.html">🔗 Phishing Detector</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <section class="hero">
+    <span class="pill">LINK SECURITY CHECK 🛡️</span>
+    <h1>Don't Trust Every <span>Link.</span></h1>
+    <p>Check suspicious URLs for common phishing warning signs.</p>
+  </section>
+
+  <section class="panel scanner">
+    <p class="eyebrow">URL SECURITY SCANNER</p>
+    <h2>🔗 Check a Website Link</h2>
+
+    <label for="urlInput">Paste the complete website URL</label>
+    <input
+      id="urlInput"
+      type="text"
+      placeholder="https://example.com"
+      autocomplete="url"
+    >
+
+    <div class="actions">
+      <button id="scanBtn" type="button">🔍 Scan Link</button>
+      <button id="clearBtn" class="secondary" type="button">Clear</button>
+    </div>
+
+    <p class="note">
+      This demo checks URL patterns. It does not guarantee that
+      a website is safe or malicious.
+    </p>
+
+    <section id="result" class="result" hidden aria-live="polite">
+      <div class="result-top">
+        <div>
+          <p class="eyebrow">SCAN RESULT</p>
+          <h2 id="resultTitle">Result</h2>
+        </div>
+        <div class="score">
+          <strong id="riskScore">0</strong>
+          <span>/100 risk</span>
+        </div>
+      </div>
+
+      <div class="meter">
+        <div id="meterFill"></div>
+      </div>
+
+      <p id="resultSummary"></p>
+      <h3>Detection Reasons</h3>
+      <ul id="findings"></ul>
+    </section>
+  </section>
+
+  <section class="panel history">
+    <h2>📋 Recent Link Scans</h2>
+    <button id="clearHistory" class="secondary" type="button">
+      Clear History
+    </button>
+    <ul id="historyList"></ul>
+  </section>
+
+  <section class="feature-grid">
+    <a class="feature panel" href="home.html">
+      <span>📩</span>
+      <h3>SMS Spam Detector</h3>
+      <p>Analyse suspicious SMS messages.</p>
+      <b>Scan message →</b>
+    </a>
+
+    <a class="feature panel" href="scan-history.html">
+      <span>📋</span>
+      <h3>Spam History</h3>
+      <p>Review your saved SMS scans.</p>
+      <b>Open history →</b>
+    </a>
+
+    <a class="feature panel" href="cyber-tips.html">
+      <span>💡</span>
+      <h3>Cyber Security Tips</h3>
+      <p>Learn how to stay safe online.</p>
+      <b>Learn safety →</b>
+    </a>
+  </section>
+
+  <footer>SCAMSHIELD 💜 · Think Smart. Click Safe.</footer>
+
+</main>
+</body>
+</html>

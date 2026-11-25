@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spam History | ScamShield</title>
+  <link rel="stylesheet" href="scan-history.css">
+  <script defer src="scan-history.js"></script>
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="home.html">🛡️ SCAM<span>SHIELD</span></a>
+    <nav><a href="home.html">🏠 Home</a><a class="active" href="scan-history.html">📋 History</a><a href="cyber-tips.html">💡 Cyber Tips</a></nav>
+  </header>
+  <main class="container">
+    <section class="hero"><p class="eyebrow">YOUR SECURITY ACTIVITY</p><h1>Spam <span>History.</span></h1><p>Review the messages you scanned in this browser.</p></section>
+    <section class="stats">
+      <article><span>Total scans</span><strong id="totalScans">0</strong></article>
+      <article><span>High risk</span><strong id="highScans">0</strong></article>
+      <article><span>Medium risk</span><strong id="mediumScans">0</strong></article>
+      <article><span>Low detected risk</span><strong id="lowScans">0</strong></article>
+    </section>
+    <section class="panel">
+      <div class="heading"><div><h2>Previous scans 📋</h2><p>Saved locally in this browser</p></div><button id="clearHistory" class="danger">Clear history</button></div>
+      <div id="historyList" class="history-list"></div>
+      <div id="emptyState" class="empty" hidden><div>🕵️</div><h3>No scans yet</h3><p>Scan an SMS on the home page and it will appear here.</p><a class="button" href="home.html#scanner">Analyse a message →</a></div>
+    </section>
+    <p class="privacy">⚠️ History is stored in this browser only. Clearing browser data may delete it.</p>
+    <footer><a href="home.html">← Back to Scanner</a> · <a href="cyber-tips.html">Cyber Tips →</a></footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07111f">
+  <title>ScamShield | Cyber Incident Navigator</title>
+
+  <link rel="stylesheet" href="incident-navigator.css">
+  <script src="incident-navigator.js" defer></script>
+</head>
+<body>
+
+  <header class="topbar">
+    <a class="brand" href="home.html">
+      <span class="brand-icon">🛡️</span>
+      <span>
+        ScamShield
+        <small>CYBER INCIDENT NAVIGATOR</small>
+      </span>
+    </a>
+
+    <a class="back-link" href="home.html">
+      ← Back to SMS Detector
+    </a>
+  </header>
+
+  <main class="container">
+
+    <section class="hero">
+      <p class="eyebrow">🟢 INTERACTIVE CYBER EMERGENCY ASSISTANCE</p>
+
+      <h1>Let's secure your <span>next step.</span></h1>
+
+      <p>
+        Choose what happened. ScamShield will provide safety
+        guidance, an action checklist and an incident summary.
+      </p>
+
+      <div class="notice">
+        <strong>Important:</strong>
+        This tool provides guidance only. It cannot directly
+        secure bank accounts or file complaints on your behalf.
+      </div>
+    </section>
+
+    <!-- STEP 1: INCIDENT SELECTION -->
+    <section class="panel" id="incident-section">
+
+      <div class="section-heading">
+        <div>
+          <p class="step-label">STEP 01</p>
+          <h2>What happened?</h2>
+        </div>
+        <span class="pill">Choose one incident</span>
+      </div>
+
+      <div class="incident-grid">
+
+        <button class="incident-card" data-incident="otp">
+          <span class="incident-icon">🔐</span>
+          <span class="card-text">
+            <strong>I shared an OTP</strong>
+            <small>OTP, PIN or password shared</small>
+          </span>
+          <span class="arrow">↗</span>
+        </button>
+
+        <button class="incident-card" data-incident="payment">
+          <span class="incident-icon">💸</span>
+          <span class="card-text">
+            <strong>UPI / Payment Fraud</strong>
+            <small>Money transferred or unknown debit</small>
+          </span>
+          <span class="arrow">↗</span>
+        </button>
+
+        <button class="incident-card" data-incident="link">
+          <span class="incident-icon">🔗</span>
+          <span class="card-text">
+            <strong>Suspicious Link</strong>
+            <small>Clicked a link or downloaded a file</small>
+          </span>
+          <span class="arrow">↗</span>
+        </button>
+
+        <button class="incident-card" data-incident="account">
+          <span class="incident-icon">🔓</span>
+          <span class="card-text">
+            <strong>My Account Was Hacked</strong>
+            <small>Lost access or noticed suspicious activity</small>
+          </span>
+          <span class="arrow">↗</span>
+        </button>
+
+        <button class="incident-card" data-incident="job">
+          <span class="incident-icon">💼</span>
+          <span class="card-text">
+            <strong>Fake Job Offer</strong>
+            <small>Fake recruiter, fees or task scam</small>
+          </span>
+          <span class="arrow">↗</span>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- STEP 2: ADAPTIVE QUESTIONS -->
+    <section class="panel hidden" id="questions-section">
+
+      <div class="section-heading">
+        <div>
+          <p class="step-label">STEP 02</p>
+          <h2>Tell us what happened</h2>
+        </div>
+        <span class="pill">Adaptive questions</span>
+      </div>
+
+      <p class="muted" id="question-intro"></p>
+
+      <form id="incident-form">
+        <div id="question-fields" class="question-grid"></div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            Generate Safety Plan →
+          </button>
+
+          <button type="button" id="start-over" class="btn btn-secondary">
+            Start Over
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- STEP 3: SAFETY PLAN -->
+    <section class="panel hidden" id="plan-section">
+
+      <div class="section-heading">
+        <div>
+          <p class="step-label">STEP 03</p>
+          <h2>Your Safety Action Plan</h2>
+        </div>
+
+        <span class="pill" id="priority-label">PRIORITY</span>
+      </div>
+
+      <div id="priority-banner" class="priority-banner"></div>
+
+      <div class="plan-grid">
+
+        <div class="steps-column">
+          <h3>Recommended Actions</h3>
+
+          <p class="muted">
+            Tick each step after completing it.
+          </p>
+
+          <div id="checklist" class="checklist"></div>
+        </div>
+
+        <aside class="report-card">
+          <div class="report-icon">🧾</div>
+
+          <h3>Incident Summary</h3>
+
+          <p class="muted">
+            Review your answers and keep a record of the
+            recommended steps.
+          </p>
+
+          <div id="summary" class="summary-box"></div>
+
+          <button type="button" id="download-summary"
+                  class="btn btn-primary full-width">
+            Download Summary (.txt)
+          </button>
+
+          <button type="button" id="print-summary"
+                  class="btn btn-secondary full-width">
+            Print / Save as PDF
+          </button>
+        </aside>
+
+      </div>
+
+      <!-- OFFICIAL REPORTING -->
+      <div class="official-box">
+        <div>
+          <p class="step-label">OFFICIAL REPORTING</p>
+          <h3>India Cyber-Fraud Resources</h3>
+
+          <p>
+            If financial cyber fraud occurred, contact your
+            bank or payment provider immediately and call
+            <strong>1930</strong> as soon as possible.
+            You can also submit a complaint on the official
+            National Cyber Crime Reporting Portal.
+          </p>
+        </div>
+
+        <div class="official-actions">
+          <a href="https://cybercrime.gov.in/"
+             target="_blank" rel="noopener noreferrer"
+             class="btn btn-primary">
+            Cyber Crime Portal ↗
+          </a>
+
+          <button type="button" id="copy-helpline"
+                  class="btn btn-secondary">
+            Copy Helpline: 1930
+          </button>
+        </div>
+      </div>
+
+      <div class="safety-note">
+        <strong>Safety reminder:</strong>
+        Never share your OTP, UPI PIN, password or CVV.
+        Do not pay anyone who promises guaranteed recovery
+        of stolen money.
+      </div>
+
+      <div class="form-actions">
+        <button type="button" id="edit-answers"
+                class="btn btn-secondary">
+          ← Edit Answers
+        </button>
+
+        <button type="button" id="new-incident"
+                class="btn btn-secondary">
+          New Incident
+        </button>
+      </div>
+
+    </section>
+
+    <footer>
+      <span>🛡️ ScamShield</span>
+      <span>Cyber Awareness • Guidance, Not Official Case Filing</span>
+    </footer>
+
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>

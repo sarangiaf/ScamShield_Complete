@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07111f">
+  <title>ScamShield | Cyber Threat Protection</title>
+  <link rel="stylesheet" href="home.css">
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <header class="navbar">
+    <a class="brand" href="home.html">
+      <span class="brand-icon">🛡</span>
+      <span>SCAM<span class="brand-accent">SHIELD</span><small>CYBER THREAT INTELLIGENCE</small></span>
+    </a>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">☰</button>
+
+    <nav class="nav-links" id="navLinks">
+      <a class="nav-active" href="#home">Dashboard</a>
+      <a href="#analyzers">Threat Analysis</a>
+      <a href="#attack-simulator">Attack Simulator</a>
+      <a href="scamtrace.html">ScamTrace</a>
+      <a href="incident-navigator.html">Incident Navigator</a>
+      <a href="cyber-quiz.html" class="nav-quiz">Cyber Quiz ↗</a>
+    </nav>
+  </header>
+
+  <main class="page-container">
+    <section class="hero" id="home">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot"></span> YOUR PERSONAL CYBER DEFENCE CENTRE</div>
+        <h1>Think Before You<br><span class="gradient-text">Click.</span> Stay Protected.</h1>
+        <p>Understand suspicious messages, inspect risky links and learn how digital scams unfold — through interactive cybersecurity tools.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#analyzers">⌕ Analyse a Threat</a>
+          <a class="btn btn-secondary" href="#attack-simulator">▶ Watch Scam Simulation</a>
+        </div>
+        <div class="hero-proof">
+          <span>◈ Rule-based analysis</span>
+          <span>◈ Educational simulation</span>
+          <span>◈ No analysis API</span>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="orbit orbit-outer"></div>
+        <div class="orbit orbit-inner"></div>
+        <div class="hero-shield">🛡️</div>
+        <div class="orbit-tag tag-top">THREAT MONITOR</div>
+        <div class="orbit-tag tag-bottom"><span class="live-dot"></span> DEFENCE SYSTEM READY</div>
+        <div class="floating-chip chip-left">🔗 URL Inspection</div>
+        <div class="floating-chip chip-right">📩 SMS Analysis</div>
+      </div>
+    </section>
+
+    <section class="status-grid" aria-label="Tool status">
+      <article class="status-card">
+        <span class="status-icon cyan">⌕</span>
+        <div><span class="muted-label">SMS ANALYZER</span><h3>Rule-based</h3><p>Phrase and urgency checks</p></div>
+        <span class="status-dot"></span>
+      </article>
+      <article class="status-card">
+        <span class="status-icon purple">↗</span>
+        <div><span class="muted-label">URL INSPECTOR</span><h3>Local checks</h3><p>Domain and link indicators</p></div>
+        <span class="status-dot"></span>
+      </article>
+      <article class="status-card">
+        <span class="status-icon orange">▦</span>
+        <div><span class="muted-label">QR SCANNER</span><h3>Image decoding</h3><p>Inspect decoded QR content</p></div>
+        <span class="status-dot"></span>
+      </article>
+      <article class="status-card">
+        <span class="status-icon green">◉</span>
+        <div><span class="muted-label">PRIVACY MODE</span><h3>Browser-side</h3><p>No server analysis endpoint</p></div>
+        <span class="status-dot"></span>
+      </article>
+    </section>
+
+    <section class="section-block" id="analyzers">
+      <div class="section-heading">
+        <div><span class="eyebrow">THREAT ANALYSIS LAB</span><h2>Investigate a suspicious signal.</h2><p>Paste a message or inspect a link using local, explainable rules.</p></div>
+        <span class="section-number">01 / ANALYSE</span>
+      </div>
+
+      <div class="analyzer-grid">
+        <article class="panel analyzer-panel">
+          <div class="panel-heading">
+            <div class="panel-icon">📩</div>
+            <div><h3>SMS Scam Detector</h3><p>Check common scam patterns in a message.</p></div>
+          </div>
+          <label for="smsInput">Message content</label>
+          <textarea id="smsInput" rows="6" placeholder="Example: Your bank account will be blocked. Verify KYC immediately..."></textarea>
+          <div class="sample-row"><span>Try a sample:</span><button type="button" class="text-button" id="smsSample">Load suspicious SMS</button></div>
+          <button class="btn btn-primary full-btn" id="analyzeSms" type="button">Analyse Message <span>→</span></button>
+          <div class="analysis-result hidden" id="smsResult" aria-live="polite">
+            <div class="result-top"><span>HEURISTIC RISK SCORE</span><strong id="smsScore">0/100</strong></div>
+            <div class="score-track"><div id="smsScoreBar"></div></div>
+            <h4 id="smsVerdict">Awaiting analysis</h4>
+            <p id="smsAdvice"></p>
+            <ul id="smsIndicators"></ul>
+          </div>
+        </article>
+
+        <article class="panel analyzer-panel">
+          <div class="panel-heading">
+            <div class="panel-icon purple-icon">🔗</div>
+            <div><h3>Suspicious URL Inspector</h3><p>Check the URL's visible structure, not its reputation.</p></div>
+          </div>
+          <label for="urlInput">Website URL</label>
+          <input id="urlInput" type="text" placeholder="https://example.com/verify">
+          <div class="sample-row"><span>Try a sample:</span><button type="button" class="text-button" id="urlSample">Load suspicious URL</button></div>
+          <button class="btn btn-primary full-btn" id="analyzeUrl" type="button">Inspect URL <span>→</span></button>
+          <div class="analysis-result hidden" id="urlResultBox" aria-live="polite">
+            <div class="result-top"><span>STRUCTURAL RISK SCORE</span><strong id="urlScore">0/100</strong></div>
+            <div class="score-track"><div id="urlScoreBar"></div></div>
+            <h4 id="urlVerdict">Awaiting inspection</h4>
+            <p id="urlAdvice"></p>
+            <ul id="urlIndicators"></ul>
+          </div>
+          <p class="small-disclaimer">No external reputation lookup is performed. A suspicious-looking URL is not proof of fraud, and a clean-looking URL is not proof of safety.</p>
+        </article>
+
+        <article class="panel analyzer-panel qr-panel">
+          <div class="panel-heading">
+            <div class="panel-icon orange-icon">▦</div>
+            <div><h3>QR Code Inspector</h3><p>Upload a QR image and inspect the decoded content.</p></div>
+          </div>
+          <label class="upload-box" for="qrFile">
+            <span class="upload-symbol">↑</span>
+            <strong>Choose QR image</strong>
+            <span>PNG, JPG or WEBP</span>
+            <input type="file" id="qrFile" accept="image/*">
+          </label>
+          <canvas id="qrCanvas" class="hidden"></canvas>
+          <div id="qrResult" class="qr-result hidden" aria-live="polite"></div>
+          <p class="small-disclaimer">QR decoding uses jsQR from a CDN, so the library needs to load from the internet. Decoded content is not automatically opened.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-block" id="attack-simulator">
+      <div class="section-heading">
+        <div><span class="eyebrow">INTERACTIVE CYBER LEARNING</span><h2>Inside a scam attack.</h2><p>Watch a simulated phishing attempt unfold, step by step.</p></div>
+        <span class="section-number">02 / SIMULATE</span>
+      </div>
+
+      <div class="simulator panel">
+        <div class="sim-topbar">
+          <div class="window-dots"><i></i><i></i><i></i></div>
+          <span>SCAM ATTACK FLOW <span class="demo-tag">DEMO ENVIRONMENT</span></span>
+          <span class="sim-live"><span class="live-dot"></span> SIMULATED</span>
+        </div>
+
+        <div class="sim-track">
+          <div class="sim-connector"></div>
+          <div class="sim-progress" id="attackProgress"></div>
+
+          <article class="attack-stage active" data-step="0">
+            <div class="stage-icon">📱</div>
+            <span class="stage-index">PHASE 01</span>
+            <h3>Fake SMS</h3>
+            <p>An urgent message tries to create panic.</p>
+            <div class="fake-message">
+              <div class="message-top"><span>Unknown Sender</span><span>Now</span></div>
+              <p>Your account may be blocked. Verify your KYC immediately.</p>
+              <div class="fake-link">Verify Account ↗</div>
+            </div>
+            <div class="warning-chip">⚠ Unexpected urgency</div>
+          </article>
+
+          <article class="attack-stage" data-step="1">
+            <div class="stage-icon">🌐</div>
+            <span class="stage-index">PHASE 02</span>
+            <h3>Fake Website</h3>
+            <p>A page imitates a trusted organisation.</p>
+            <div class="fake-browser">
+              <div class="browser-dots">● ● ●</div>
+              <div class="fake-url">⚠ suspicious-example.test</div>
+              <div class="fake-bank">BANK LOGIN</div>
+              <div class="fake-input">Customer ID</div>
+              <div class="fake-input">Password</div>
+              <div class="fake-submit">SIMULATED LOGIN</div>
+            </div>
+            <div class="warning-chip">⚠ Verify the domain</div>
+          </article>
+
+          <article class="attack-stage" data-step="2">
+            <div class="stage-icon">🔓</div>
+            <span class="stage-index">PHASE 03</span>
+            <h3>Data Exposure Risk</h3>
+            <p>Details entered on a fraudulent page could be exposed.</p>
+            <div class="data-visual">
+              <div class="data-row">USER DETAILS <span>••••••</span></div>
+              <div class="data-row">PASSWORD <span>••••••</span></div>
+              <div class="data-warning">⚠ POTENTIAL EXPOSURE</div>
+              <div class="data-packets"><i></i><i></i><i></i><i></i><i></i></div>
+            </div>
+            <div class="warning-chip">⚠ Never share credentials</div>
+          </article>
+
+          <article class="attack-stage" data-step="3">
+            <div class="stage-icon">🛡️</div>
+            <span class="stage-index">PHASE 04</span>
+            <h3>ScamShield Alert</h3>
+            <p>Pause and verify before taking action.</p>
+            <div class="defence-card">
+              <div class="defence-check">✓</div>
+              <strong>Warning signs highlighted</strong>
+              <p>Urgency + unknown sender + suspicious link</p>
+              <div class="risk-meter"><span></span></div>
+              <small>Illustrative indicators only</small>
+            </div>
+            <div class="safe-chip">✓ Stop · Verify · Report</div>
+          </article>
+        </div>
+
+        <div class="sim-bottom">
+          <div><span class="eyebrow">CURRENT SCENE</span><p id="simCaption" aria-live="polite">STEP 1 / 4 — A suspicious message creates urgency.</p></div>
+          <div class="sim-controls">
+            <button type="button" class="btn btn-primary" id="simPlay">▶ Play</button>
+            <button type="button" class="btn btn-secondary" id="simPause">Ⅱ Pause</button>
+            <button type="button" class="btn btn-secondary" id="simReplay">↻ Replay</button>
+          </div>
+        </div>
+        <div class="sim-footnote">Educational simulation only. No real messages are sent, accounts accessed or credentials collected.</div>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-heading">
+        <div><span class="eyebrow">UNDERSTAND THE ATTACK</span><h2>How the trap works.</h2><p>Four common stages that can appear in a phishing scam.</p></div>
+        <span class="section-number">03 / LEARN</span>
+      </div>
+      <div class="flow-grid">
+        <article class="flow-card"><span class="flow-number">01</span><span class="flow-emoji">📨</span><h3>Social Engineering</h3><p>A fake authority, urgent threat or tempting reward pushes someone to act quickly.</p></article>
+        <article class="flow-card"><span class="flow-number">02</span><span class="flow-emoji">🎭</span><h3>Impersonation</h3><p>A message or page pretends to represent a bank, delivery service or known brand.</p></article>
+        <article class="flow-card"><span class="flow-number">03</span><span class="flow-emoji">🔑</span><h3>Information Request</h3><p>The page may ask for passwords, OTPs, payment details or other sensitive information.</p></article>
+        <article class="flow-card"><span class="flow-number">04</span><span class="flow-emoji">🛡️</span><h3>Defensive Action</h3><p>Stop, open the official app yourself, verify the claim and report suspicious activity.</p></article>
+      </div>
+    </section>
+
+    <section class="section-block">
+      <div class="section-heading">
+        <div><span class="eyebrow">YOUR SECURITY TOOLKIT</span><h2>Explore more protection tools.</h2><p>Continue to other sections of your ScamShield project.</p></div>
+        <span class="section-number">04 / EXPLORE</span>
+      </div>
+      <div class="tools-grid">
+        <a href="scamtrace.html" class="tool-card"><span class="tool-icon">🧬</span><div><h3>ScamTrace Analyzer</h3><p>Inspect suspicious message patterns using local phrase rules.</p><span class="tool-link">Open ScamTrace ↗</span></div></a>
+        <a href="incident-navigator.html" class="tool-card"><span class="tool-icon">🚨</span><div><h3>Cyber Incident Navigator</h3><p>Learn the next steps to take after a suspected cyber incident.</p><span class="tool-link">Open Navigator ↗</span></div></a>
+        <a href="cyber-quiz.html" class="tool-card"><span class="tool-icon">🧠</span><div><h3>Cyber Safety Quiz</h3><p>Test your knowledge of phishing, OTP safety and suspicious links.</p><span class="tool-link">Take the Quiz ↗</span></div></a>
+      </div>
+    </section>
+
+    <section class="safety-banner">
+      <div class="safety-icon">🔐</div>
+      <div><span class="eyebrow">REMEMBER</span><h2>Pause before you trust.</h2><p>Never share your OTP, UPI PIN or password with an unsolicited contact. If money is lost to cyber fraud in India, contact your bank immediately and call 1930 as soon as possible.</p></div>
+      <a class="btn btn-primary" href="incident-navigator.html">Safety Steps ↗</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <a class="brand footer-brand" href="#home"><span class="brand-icon">🛡</span><span>SCAM<span class="brand-accent">SHIELD</span><small>CYBER THREAT INTELLIGENCE</small></span></a>
+    <p>Educational cybersecurity prototype · Rule-based results may be wrong.</p>
+    <a href="#home">Back to top ↑</a>
+  </footer>
+</body>
+</html>

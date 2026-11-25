@@ -1,0 +1,524 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScamShield | Cyber Security Quiz</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #06101f, #10243b, #071321);
+  color: #edf6ff;
+  min-height: 100vh;
+  padding: 25px 16px;
+}
+
+header {
+  max-width: 1000px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 55px;
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 800;
+  color: #48e5f5;
+}
+
+.logo span { color: white; }
+
+.back {
+  text-decoration: none;
+  color: #dceafa;
+  border: 1px solid #344b67;
+  padding: 11px 17px;
+  border-radius: 10px;
+}
+
+.back:hover { background: #18304b; }
+
+.container {
+  max-width: 760px;
+  margin: auto;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.tag {
+  color: #49e4f5;
+  letter-spacing: 3px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: clamp(30px, 5vw, 46px);
+  margin: 15px 0;
+}
+
+.heading p {
+  color: #a9bbd1;
+  line-height: 1.7;
+}
+
+.card {
+  background: rgba(13, 30, 50, .96);
+  border: 1px solid #28415e;
+  padding: clamp(20px, 5vw, 36px);
+  border-radius: 22px;
+  box-shadow: 0 20px 60px #0005;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: #b6c8db;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.progress {
+  height: 7px;
+  background: #25374d;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+#progressBar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #24cbdc, #68f5c4);
+  transition: width .3s;
+}
+
+#question {
+  font-size: 23px;
+  line-height: 1.5;
+  margin-bottom: 25px;
+}
+
+.options {
+  display: grid;
+  gap: 13px;
+}
+
+.option {
+  text-align: left;
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #304863;
+  color: #edf6ff;
+  background: #10243a;
+  font-size: 15px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.option:hover:not(:disabled) {
+  border-color: #42dbea;
+  background: #17334d;
+  transform: translateY(-1px);
+}
+
+.option:disabled { cursor: default; }
+
+.option.correct {
+  border-color: #36d99a;
+  background: #123c35;
+}
+
+.option.wrong {
+  border-color: #ff7185;
+  background: #432431;
+}
+
+#feedback {
+  display: none;
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 12px;
+  line-height: 1.6;
+  background: #132b40;
+  color: #dceafa;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.primary {
+  border: 0;
+  border-radius: 11px;
+  padding: 14px 23px;
+  background: #48dce9;
+  color: #061522;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.primary:hover { background: #83f2f7; }
+
+.primary:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}
+
+#result { display: none; text-align: center; }
+
+.score {
+  font-size: 65px;
+  color: #50e5ed;
+  font-weight: 800;
+  margin: 20px 0;
+}
+
+#resultMessage {
+  color: #c0d0e2;
+  line-height: 1.8;
+  margin-bottom: 25px;
+}
+
+.result-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.secondary {
+  background: transparent;
+  color: white;
+  border: 1px solid #405873;
+}
+
+footer {
+  text-align: center;
+  color: #8096af;
+  margin: 30px auto 10px;
+  font-size: 12px;
+}
+
+@media(max-width: 500px) {
+  header { margin-bottom: 35px; }
+  #question { font-size: 20px; }
+  .option { padding: 14px; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="logo">🛡 Scam<span>Shield</span></div>
+  <a class="back" href="home.html">← Back to Dashboard</a>
+</header>
+
+<main class="container">
+  <section class="heading">
+    <div class="tag">CYBER DEFENCE TRAINING</div>
+    <h1>Cyber Security Quiz</h1>
+    <p>Test your cyber awareness. Learn to recognise threats before they strike.</p>
+  </section>
+
+  <section class="card" id="quizCard">
+    <div class="stats">
+      <span id="questionCount">Question 1 of 10</span>
+      <span id="scoreCount">Score: 0</span>
+    </div>
+
+    <div class="progress">
+      <div id="progressBar"></div>
+    </div>
+
+    <h2 id="question">Loading question...</h2>
+    <div class="options" id="options"></div>
+    <div id="feedback" aria-live="polite"></div>
+
+    <div class="actions">
+      <button class="primary" id="nextBtn" disabled>Next Question →</button>
+    </div>
+  </section>
+
+  <section class="card" id="result">
+    <div class="tag">QUIZ COMPLETED</div>
+    <h2 style="font-size:30px;margin-top:15px">Your Results</h2>
+    <div class="score" id="finalScore">0/10</div>
+    <p id="resultMessage"></p>
+    <div class="result-actions">
+      <button class="primary" id="restartBtn">↻ Try Again</button>
+      <a href="home.html" class="back">Dashboard</a>
+    </div>
+  </section>
+</main>
+
+<footer>SCAMSHIELD • Cyber Awareness & Digital Safety</footer>
+
+<script>
+"use strict";
+
+const questions = [
+  {
+    q: "You receive a message saying your bank account will be blocked unless you click a link immediately. What should you do?",
+    options: [
+      "Click the link immediately",
+      "Share your OTP to verify your account",
+      "Verify through the bank's official app or website",
+      "Forward the message to everyone"
+    ],
+    answer: 2,
+    explanation: "Urgency and threats are common phishing tactics. Verify using your bank's official channel, not the message link."
+  },
+  {
+    q: "What is the safest way to handle an OTP?",
+    options: [
+      "Share it with a caller claiming to be bank staff",
+      "Keep it private and never disclose it to callers",
+      "Post it in a support group",
+      "Send it to an unknown number"
+    ],
+    answer: 1,
+    explanation: "An OTP can authorise a login or transaction. Never disclose it to another person."
+  },
+  {
+    q: "Which password is generally the strongest?",
+    options: [
+      "password123",
+      "yourname2004",
+      "12345678",
+      "A long, unique passphrase not reused elsewhere"
+    ],
+    answer: 3,
+    explanation: "Long, unique passwords or passphrases are harder to guess. A password manager can help you manage them."
+  },
+  {
+    q: "What does HTTPS indicate about a website connection?",
+    options: [
+      "The website is guaranteed to be genuine",
+      "The connection is encrypted, but the site may still be malicious",
+      "The website cannot contain scams",
+      "The website is officially verified by the government"
+    ],
+    answer: 1,
+    explanation: "HTTPS protects data in transit, but it does not guarantee that a website is trustworthy."
+  },
+  {
+    q: "A stranger asks you to scan a QR code to receive a prize. What is the safest response?",
+    options: [
+      "Scan it without checking",
+      "Enter your banking PIN if requested",
+      "Verify the offer and inspect the destination before proceeding",
+      "Share your payment app credentials"
+    ],
+    answer: 2,
+    explanation: "QR codes can hide malicious links or payment requests. Verify the source and destination first."
+  },
+  {
+    q: "What is phishing?",
+    options: [
+      "A technique to trick people into revealing sensitive information",
+      "A method of improving Wi-Fi speed",
+      "A type of computer monitor",
+      "A legitimate backup process"
+    ],
+    answer: 0,
+    explanation: "Phishing uses deceptive messages or websites to steal credentials, financial details or other information."
+  },
+  {
+    q: "You find an unknown USB drive in a public place. What should you do?",
+    options: [
+      "Plug it into your personal laptop",
+      "Open every file on it",
+      "Give it to a responsible IT or security team without plugging it in",
+      "Use it to store passwords"
+    ],
+    answer: 2,
+    explanation: "Unknown USB devices may contain malicious files or exploit device vulnerabilities."
+  },
+  {
+    q: "What is multi-factor authentication (MFA)?",
+    options: [
+      "Using the same password on multiple sites",
+      "Using two or more different types of authentication factors",
+      "Changing your username every day",
+      "Disabling account security alerts"
+    ],
+    answer: 1,
+    explanation: "MFA combines different factor types, such as something you know and something you have."
+  },
+  {
+    q: "A caller says they are from technical support and asks for remote access to your computer. What should you do?",
+    options: [
+      "Allow access because they sound professional",
+      "Share all your passwords",
+      "Install any app they send",
+      "Independently verify the request before granting access"
+    ],
+    answer: 3,
+    explanation: "Unsolicited remote-access requests are a common scam technique. Contact the organisation using a trusted channel."
+  },
+  {
+    q: "What should you do if you suspect you have clicked a phishing link and entered your password?",
+    options: [
+      "Ignore it and hope nothing happens",
+      "Change the password from a trusted device, secure affected accounts and contact the relevant provider",
+      "Send your password to the sender for confirmation",
+      "Delete the browser and take no other action"
+    ],
+    answer: 1,
+    explanation: "Act quickly: change the exposed password from a trusted device, change reused passwords, enable MFA and report any affected financial accounts."
+  }
+];
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const countEl = document.getElementById("questionCount");
+const scoreEl = document.getElementById("scoreCount");
+const progressEl = document.getElementById("progressBar");
+const feedbackEl = document.getElementById("feedback");
+const nextBtn = document.getElementById("nextBtn");
+const quizCard = document.getElementById("quizCard");
+const resultEl = document.getElementById("result");
+
+function showQuestion() {
+  answered = false;
+
+  const item = questions[currentQuestion];
+
+  countEl.textContent =
+    `Question ${currentQuestion + 1} of ${questions.length}`;
+
+  scoreEl.textContent = `Score: ${score}`;
+
+  progressEl.style.width =
+    `${(currentQuestion / questions.length) * 100}%`;
+
+  questionEl.textContent = item.q;
+  optionsEl.replaceChildren();
+
+  feedbackEl.style.display = "none";
+  feedbackEl.textContent = "";
+
+  item.options.forEach((option, index) => {
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "option";
+    button.textContent =
+      `${String.fromCharCode(65 + index)}. ${option}`;
+
+    button.addEventListener("click", () => selectAnswer(index));
+
+    optionsEl.appendChild(button);
+  });
+
+  nextBtn.disabled = true;
+  nextBtn.textContent =
+    currentQuestion === questions.length - 1
+      ? "View Results →"
+      : "Next Question →";
+}
+
+function selectAnswer(selectedIndex) {
+  if (answered) return;
+
+  answered = true;
+
+  const item = questions[currentQuestion];
+  const buttons = optionsEl.querySelectorAll(".option");
+  const isCorrect = selectedIndex === item.answer;
+
+  if (isCorrect) score++;
+
+  buttons.forEach((button, index) => {
+    button.disabled = true;
+
+    if (index === item.answer) {
+      button.classList.add("correct");
+    }
+
+    if (index === selectedIndex && !isCorrect) {
+      button.classList.add("wrong");
+    }
+  });
+
+  feedbackEl.style.display = "block";
+  feedbackEl.textContent =
+    `${isCorrect ? "✓ Correct!" : "✕ Not quite."} ${item.explanation}`;
+
+  scoreEl.textContent = `Score: ${score}`;
+  nextBtn.disabled = false;
+}
+
+function showResults() {
+  quizCard.style.display = "none";
+  resultEl.style.display = "block";
+
+  progressEl.style.width = "100%";
+
+  document.getElementById("finalScore").textContent =
+    `${score}/${questions.length}`;
+
+  const percentage = Math.round((score / questions.length) * 100);
+
+  let message;
+
+  if (percentage >= 80) {
+    message = "Excellent work! You have a strong foundation in cyber safety. Keep practising to stay alert.";
+  } else if (percentage >= 50) {
+    message = "Good effort! Review the explanations and practise again to strengthen your cyber awareness.";
+  } else {
+    message = "Keep learning! Review each explanation and try the quiz again to build safer online habits.";
+  }
+
+  document.getElementById("resultMessage").textContent =
+    `You scored ${percentage}%. ${message}`;
+}
+
+nextBtn.addEventListener("click", () => {
+  if (!answered) return;
+
+  if (currentQuestion < questions.length - 1) {
+    currentQuestion++;
+    showQuestion();
+  } else {
+    showResults();
+  }
+});
+
+document.getElementById("restartBtn").addEventListener("click", () => {
+  currentQuestion = 0;
+  score = 0;
+  quizCard.style.display = "block";
+  resultEl.style.display = "none";
+  showQuestion();
+});
+
+showQuestion();
+</script>
+</body>
+</html>
